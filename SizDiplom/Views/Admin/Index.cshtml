@@ -1,0 +1,41 @@
+﻿@* AdminController *@
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("AdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+        
+
+        <br />
+        <div class="form-group">
+            
+            <br />
+            <form >          
+            
+                <button type="submit" asp-action="Index" asp-controller="Department" formmethod="get">Работать с департаментами</button><br />
+                
+            </form>
+            
+            <br />
+        </div>
+        <br />
+        <br />
+        <div class="form-group">
+            
+            <br />
+            <form >              
+           
+                <button type="submit" asp-action="Index" asp-controller="AdminsEdit" formmethod="get">Работать с администраторами</button><br />
+            </form>
+        </div>
+
+    </div>
+
+</div>

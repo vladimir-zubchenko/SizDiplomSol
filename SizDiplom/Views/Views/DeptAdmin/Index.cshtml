@@ -1,0 +1,29 @@
+﻿@model SizDiplom.ViewModels.DepartAdminViewModel
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("DeptAdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>         
+        
+            <div>
+
+                <ol >
+                    @foreach (Siz siz in Model.alarmSizsList)
+                    {
+                    <li> Инв.Номер @siz.TabNom ___ следующая поверка @siz.NextCheckDate.ToShortDateString() ___ СИЗ @siz.Name </li>
+                    }
+                </ol>               
+            
+            </div>
+            
+     </div>  
+     
+</div>

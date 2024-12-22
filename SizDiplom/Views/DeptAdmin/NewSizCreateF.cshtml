@@ -1,0 +1,49 @@
+﻿@model SizDiplom.ViewModels.NewSizCreateViewModel
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Страница регистрации нового СИЗ</h2>      
+
+    </div>
+    <div id="article">
+        <h2>@ViewData["SizSituated"]</h2>
+        <h2>@ViewData["SizPlace"]</h2>
+        <h2>Введите регистрационные данные ниже</h2>
+        <br />
+
+        <form asp-action="NewSizCreate" asp-controller="DeptAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <br />
+                <div>
+                    <label asp-for="Name">Введите название СИЗ</label><br />
+                    <input type="text" asp-for="Name" /><br />
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="TabNom">Введите Инв Номер СИЗ</label><br />
+                    <input type="text" asp-for="TabNom" /><br />
+                    <span asp-validation-for="TabNom"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="CheckDate">Введите дату следующей поверки дд.мм.гггг </label><br />
+                    <input type="text" asp-for="CheckDate" /><br />
+                    <span asp-validation-for="CheckDate"></span>
+                </div>                               
+                <br />
+                <div>
+                    <br />
+                    <input type="submit" value="ЗАРЕГИСТРИРОВАТЬ" /><br />
+                    <br />
+                    <button formaction="Index" formmethod="get">На начальную страницу</button>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+</div>

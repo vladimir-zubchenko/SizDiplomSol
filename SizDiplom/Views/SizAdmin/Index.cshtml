@@ -1,0 +1,33 @@
+﻿@model SizDiplom.ViewModels.SizAdminViewModel
+
+@* SizAdminController *@
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("SizAdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>Список сиз с просроченной датой поверки</h2>
+
+        <div>
+            <table class="table">
+                <tr><th>Инв. номер СИЗ</th><th>Дата след. поверки</th><th>Название СИЗ</th></tr>
+            
+                @foreach (Siz siz in Model.AlarmSizsList)
+                {
+                 <tr><td>@siz.TabNom </td> <td> @siz.NextCheckDate.ToShortDateString()</td> <td>@siz.Name </td></tr>
+                }
+            
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

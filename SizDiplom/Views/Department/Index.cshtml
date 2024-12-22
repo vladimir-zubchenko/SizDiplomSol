@@ -1,0 +1,54 @@
+﻿@model SizDiplom.ViewModels.DepartmentViewModel
+
+@*DepartmentController/Index*@
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("AdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+
+
+        <br />
+        <div class="form-group">
+
+            <br />
+            <form asp-action="DeptDetails" asp-controller="Department">
+
+                <select id="DepartmentId" name="DepartmentId">
+
+                    @foreach (Department dep in Model.Departments)
+                    {
+                    <option value="@dep.Id">@dep.Name</option>
+                    }
+
+                </select>
+
+                <br />
+                <br />
+                <button type="submit" formmethod="post">Работать с департаментом</button><br />
+
+            </form>
+            <br />
+            <br />
+            <form>
+                <button asp-action="Create" asp-controller="Department" formmethod="get">Добавить новый департамент</button>
+            </form>
+            <br />
+            <br />
+            <form>
+
+            <button asp-action="Index" asp-controller="Admin" formmethod="get">Выйти без изменений</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>

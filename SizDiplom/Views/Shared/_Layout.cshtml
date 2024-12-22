@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    @await Html.PartialAsync("CssPartial")
+    <title>КОНТРОЛЬ СИЗ</title>
+</head>
+
+<body>
+    <header>
+        @await Html.PartialAsync("HeaderPartial")
+    </header>
+
+
+    <div class="container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    <footer>
+       @await Html.PartialAsync("FooterPartial")
+    </footer>
+
+
+</body>
+
+</html>

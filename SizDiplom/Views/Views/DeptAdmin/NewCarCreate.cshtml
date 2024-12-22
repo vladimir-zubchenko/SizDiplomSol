@@ -1,0 +1,51 @@
+﻿@model SizDiplom.ViewModels.CarChangeViewModel
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Страница ввода данных новой машины</h2>
+
+    </div>
+
+    <div id="article">
+        <h2>Введите данные ниже</h2><br /><br />
+
+        <form asp-action="ChangeCar" asp-controller="DeptAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div>
+                    <label asp-for="CarNomber">Введите номер новой машины</label><br />
+                    <input type="text" asp-for="CarNomber" /><br />
+                    <span asp-validation-for="CarNomber"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Description">Введите описание новой машины</label><br />
+                    <input type="text" asp-for="Description" /><br />
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="DepartmentId">@Model.DepartmentId</label><br />
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
+
+                    <label asp-for="Id">@Model.Id</label><br />
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                </div>
+                <br />
+                <br />
+                <div>
+                    <button asp-action="NewCarCreate" formmethod="post">СОХРАНИТЬ ДАННЫЕ</button>
+
+                </div>
+                <br />
+                <br />
+                <button asp-action="Index" formmethod="get">Выйти БЕЗ ИЗМЕНЕНИЙ</button>
+               
+                
+            </div>
+        </form>
+
+
+    </div>
+</div>

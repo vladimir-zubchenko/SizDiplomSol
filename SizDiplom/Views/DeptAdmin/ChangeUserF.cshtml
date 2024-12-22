@@ -1,0 +1,63 @@
+﻿@model SizDiplom.ViewModels.UserChangeViewModel
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Страница коррекции регистрационных данных<br/> пользователя</h2>
+
+    </div>
+
+    <div id="article">
+        <h2>Измените регистрационные данные ниже</h2>
+
+        <form asp-action="ChangeUser" asp-controller="DeptAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div>
+                    <label asp-for="Login">Введите Ваш Логин</label><br />
+                    <input type="text" asp-for="Login" /><br />
+                    <span asp-validation-for="Login"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="TabNom">Введите Ваш Табельный номер</label><br />
+                    <input type="text" asp-for="TabNom" /><br />
+                    <span asp-validation-for="TabNom"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="DepartmentName">@Model.DepartmentName</label><br /> 
+                    <input type="" asp-for="DepartmentName" value="@Model.DepartmentName" /><br />  
+                    <label asp-for="DepartmentId">@Model.DepartmentId</label>
+                    <input type="" asp-for="DepartmentId" value="@Model.DepartmentId"/><br />
+                    <label asp-for="Id">@Model.Id</label><br />
+                    <input type="" asp-for="Id" value="@Model.Id" /><br />
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Password">Введите пароль</label><br />
+                    <input asp-for="Password" value="@Model.Password" /><br />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <br />
+                <div>
+                    <input type="hidden" asp-for="Role" value="@Model.Role" />
+                </div>
+                <br />
+                <br />
+                <div>
+                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                    
+                </div>
+                <br />
+                <br />
+                <button formaction="Index" formmethod="get">Выйти БЕЗ ИЗМЕНЕНИЙ</button>
+                <br />
+                <br />
+                <button formaction="DeleteUser" formmethod="post">УДАЛИТЬ ДАННЫЕ РАБОТНИКА</button>
+            </div>
+        </form>
+
+
+    </div>
+</div>

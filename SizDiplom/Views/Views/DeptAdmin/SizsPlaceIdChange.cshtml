@@ -1,0 +1,66 @@
+﻿@model SizDiplom.ViewModels.DepartAdminViewModel
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Возможные операции</h2>
+        <form id="sizUserIdChangeForm" method="post" asp-action="" asp-controller="DeptAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+
+                <div class="form-group">
+                    <label for="SizId">Model.SizId</label>
+                    <input id="SizId" name="SizId" value="@Model.SizId" />
+                </div>
+
+                <div class="form-group">
+                    <label for="PlaceId">Model.PlaceId</label>
+                    <input id="PlaceId" name="PlaceId" value="@Model.PlaceId" />
+                </div>
+
+                <div class="form-group">
+                    <label for="CarId">Model.CarId</label>
+                    <input id="CarId" name="CarId" value="@Model.CarId" />
+                </div>
+
+                <div class="form-group">
+                    <label for="UserId">Model.UserId</label>
+                    <input id="UserId" name="UserId" value="@Model.UserId" />
+                </div>
+
+
+
+                <div>
+
+                    <button formaction="Index" formmethod="post">Распределено верно</button><br />
+                    <button formaction="SelectedSiz" formmethod="post">Распределить заново</button>
+
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+
+        <div>
+
+            <ol>
+                @foreach (Siz siz in Model.alarmSizsList)
+                {
+                    <li> Инв.Номер @siz.TabNom ___ следующая поверка @siz.NextCheckDate.ToShortDateString() ___ СИЗ @siz.Name </li>
+
+
+                }
+            </ol>
+            <h2>@ViewData["SizPlace"]</h2>
+        </div>
+
+    </div>
+
+</div>
+    

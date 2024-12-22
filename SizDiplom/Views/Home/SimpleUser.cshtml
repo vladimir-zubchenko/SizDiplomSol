@@ -1,0 +1,24 @@
+﻿@model SizDiplom.ViewModels.UsersSizViewModel
+@{
+    ViewData["Title"] = "HomeController metod Index";
+}
+
+
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <p>Для завершения работы выйдите <br />из программы, воспользовавшись кнопкой </p>
+        <p><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">ВЫХОД ИЗ ПРОГРАММЫ</a></p>
+    </div>
+    <div id="article">
+        <h2>Здравствуйте, @Model.User.Login ! </h2>
+        <h3>Ваш табельный номер - @Model.User.TabNom</h3>
+        <p>За вами числятся следующие СИЗ:</p>
+        @foreach (Siz s in Model.SizsList)
+        {
+            <p>инв.номер - @s.TabNom ___ следующая поверка - @s.NextCheckDate.ToShortDateString() ___ СИЗ - @s.Name</p>
+        }
+        <p>Для завершения работы выйдите из программы, воспользовавшись кнопкой </p>
+    </div>
+</div>

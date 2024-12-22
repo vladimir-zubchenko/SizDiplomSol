@@ -1,0 +1,45 @@
+﻿@model SizDiplom.ViewModels.DepartmentViewModel
+
+@* DepartmentController/CREATE *@
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("DepartmentMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+        <h2>@ViewData["Warning"]</h2>
+        <br />
+
+
+        <form asp-action="Create" asp-controller="Department" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+            <div class="form-group"> 
+                <label asp-for="Name">Введите название нового департамента:</label><br />
+                <input type="text" asp-for="Name" /><br />
+                <span asp-validation-for="Name"></span><br /><br />
+            </div>
+            <div>
+                <input type="number" asp-for="Id" />
+            </div>
+                <br />
+                
+                <button type="submit" formmethod="post">Добавить департамент в БД</button><br />
+            
+        </form>
+        <br />
+        <br />
+        <form>
+            <button asp-action="Index" asp-controller="Admin" formmethod="get">Выйти без изменений</button>
+        </form>
+
+
+    </div>
+
+</div>

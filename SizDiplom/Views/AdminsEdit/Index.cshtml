@@ -1,0 +1,45 @@
+﻿@model SizDiplom.ViewModels.AdmEditViewModel
+
+@* AdminsEditController/Index *@
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("AdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+
+
+        <br />
+        
+        <br />
+        <br />
+        <div class="form-group">            
+            <form asp-action="AdminDetails" asp-controller="AdminsEdit">
+
+                <select id="UserId" name="Id">
+
+                    @foreach (User user in Model.Admins)
+                    {
+                        <option value="@user.Id">@user.TabNom ___ @user.Login </option>
+                    }
+                </select>
+                <br />
+                <br />
+                <button type="submit" formmethod="post">Работать с администратором</button><br />
+            </form>
+            <br />
+            <br />
+            <form>
+                <button asp-action="Create" asp-controller="Department" formmethod="get">Добавить нового администратора</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>

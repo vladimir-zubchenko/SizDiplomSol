@@ -1,0 +1,50 @@
+﻿@model SizDiplom.ViewModels.PlaceChangeViewModel
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Страница ввода данных склада</h2>
+
+    </div>
+
+    <div id="article">
+        <h2>Внесите данные склада ниже</h2><br /><br />
+
+        <form asp-action="NewPlaceCreate" asp-controller="DeptAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div>
+                    <label asp-for="Name">Введите новое название склада</label><br />
+                    <input type="text" asp-for="Name" /><br />
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Description">Введите новое описание склада</label><br />
+                    <input type="text" asp-for="Description" /><br />
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="DepartmentId">@Model.DepartmentId</label><br />
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
+
+                    <label asp-for="Id">@Model.Id</label><br />
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                </div>
+                <br />
+                <br />
+                <div>
+                    <input type="submit" value="ДОБАВИТЬ В БАЗУ ДАННЫХ" />
+
+                </div>
+                <br />
+                <br />
+                <button formaction="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>               
+                
+            </div>
+        </form>
+
+
+    </div>
+</div>

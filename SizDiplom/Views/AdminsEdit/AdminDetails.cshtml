@@ -1,0 +1,83 @@
+﻿@model SizDiplom.ViewModels.AdmEditViewModel
+
+@*AdminsEditController/AdminDetails  *@
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("DepartmentMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+        <h2>@ViewData["Warning"]</h2>
+        <br />
+        <form asp-action="Edit" asp-controller="AdminsEdit" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div>
+                    <label asp-for="Login">Введите Логин</label><br />
+                    <input type="text" asp-for="Login" /><br />
+                    <span asp-validation-for="Login"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="TabNom">Введите Табельный номер</label><br />
+                    <input type="text" asp-for="TabNom" /><br />
+                    <span asp-validation-for="TabNom"></span>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="DepartmentName">@Model.DepartmentName</label><br />
+                    <input type="text" asp-for="DepartmentName" value="@Model.DepartmentName" /><br />
+                    <label asp-for="DepartmentId">@Model.DepartmentId</label>
+                    <input type="number" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
+                    <label asp-for="Id">@Model.Id</label><br />
+                    <input type="number" asp-for="Id" value="@Model.Id" /><br />
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Password">Введите пароль</label><br />
+                    <input asp-for="Password" value="@Model.Password" /><br />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <br />
+                <div>
+                    <label>Выберите роль</label><br />
+                    <select id="Role" name="Role">
+                        @foreach (string r in Model.Roles)
+                        {
+                            <option value="@Model.Role">@r </option>
+                        }
+                    </select>
+                    @* <input type="hidden" asp-for="Role" value="@Model.Role" /> *@
+                </div>
+                <br />
+                <br />
+                <div>
+                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                </div>
+                <br />
+                <br />
+                
+                <br />
+                <br />
+                <button formaction="Delete" formmethod="post">УДАЛИТЬ ДАННЫЕ АДМИНИСТРАТОРА</button>
+            </div>
+        </form>               
+                
+       
+        <br />
+        <br />
+        <form>
+
+            <button asp-action="Index" asp-controller="Admin" formmethod="get">Выйти без изменений</button>
+        </form>
+
+
+    </div>
+
+</div>
