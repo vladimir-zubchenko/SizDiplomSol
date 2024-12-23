@@ -1,0 +1,52 @@
+﻿@model SizDiplom.ViewModels.SizAdminViewModel
+
+@*SizAdminController/SizDetale  *@
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+
+        @await Html.PartialAsync("SizAdminMenuPartial")
+
+    </div>
+
+    <div id="article">
+
+        <h2>@ViewData["Title"]</h2>
+        <h2>@ViewData["Warning"]</h2>
+        <br />
+        <form asp-action="Edit" asp-controller="SizAdmin" asp-anti-forgery="true">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div>
+                    <label>@Model.Siz.TabNom</label><input type="hidden" asp-for ="@Model.Siz.TabNom" value="@Model.Siz.TabNom" /><br />
+                    <label>@Model.Siz.Name</label><input type="hidden" asp-for ="@Model.Siz.Name" value="@Model.Siz.Name" /><br />
+                    <label>Дата следующей поверки @Model.Siz.NextCheckDate</label><br />
+                    <label>Введите новую дату следующей поверки</label>
+                    <input type="hidden" asp-for="@Model.Siz.NextCheckDate" value="@Model.Siz.NextCheckDate" /><br />
+                    <<input type="date" asp-for="@Model.CheckDate" /><br />
+                    
+                    <input type="hidden" asp-for="@Model.Siz.Id" value="@Model.Siz.Id" />
+                    <input type="hidden" asp-for="@Model.Siz.DepartmentId" value="@Model.Siz.DepartmentId" />
+                    <input type="hidden" asp-for="@Model.Siz.PlaceId" value="@Model.Siz.PlaceId" />
+                    <input type="hidden" asp-for="@Model.Siz.CarId" value="@Model.Siz.CarId" />
+                    <input type="hidden" asp-for="@Model.Siz.UserId" value="@Model.Siz.UserId" />
+                </div>    
+                <br />               
+                <div>
+                    <button type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                </div>
+                
+            </div>
+        </form>
+
+        <br /> 
+        <br />
+        <br />
+        <form>
+
+            <button asp-action="Index" asp-controller="SizAdmin" formmethod="get">Выйти без изменений</button>
+        </form>
+    </div>
+
+</div>

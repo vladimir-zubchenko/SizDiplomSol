@@ -6,7 +6,7 @@ namespace SizDiplom.ViewModels
     public class SizAdminViewModel
     {
 
-        public List<Siz> SizsList { get; set; } = new List<Siz>();//список  СИЗ РЕЗЕРВ
+       
         public List<Siz> AlarmSizsList { get; set; } = new List<Siz>(); // список СИЗ (по требованию задачи)
 
         public Siz? Siz { get; set; } // выбранный из БД СИЗ 
@@ -22,7 +22,7 @@ namespace SizDiplom.ViewModels
 
 
         [Display(Name = "Введите инвентарный номер СИЗ")]
-        public string SizName { get; set; } = string.Empty;  // инвентарный номер СИЗ для поиска в БД      
+        public string SizNomber { get; set; } = string.Empty;  // инвентарный номер СИЗ для поиска в БД      
 
     }
 }
