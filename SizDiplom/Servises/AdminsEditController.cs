@@ -72,7 +72,7 @@ namespace SizDiplom.Servises
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AdminEdit(AdmEditViewModel admEdvm)
+        public async Task<ActionResult> Edit(AdmEditViewModel admEdvm)
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
@@ -96,41 +96,24 @@ namespace SizDiplom.Servises
             user.TabNom = admEdvm.TabNom;
             user.Role = admEdvm.Role;
             user.DepartmentId = admEdvm.DepartmentId;
+            
             db.Users.Update(user);
             await db.SaveChangesAsync();
             ViewData["Title"] = "Новые данные администратора сохранены";
-            return View("AdminDetails", admEdvm);
-        }
-
-        // GET: AdminsEditController/Create
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-
-        public async Task<IActionResult> Create()
-        {
-            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-                return RedirectToAction("Login", "Account");
-            }
-            admEdvm.Departments = await db.Departments.ToListAsync();
-            admEdvm.Roles.Clear();            
+            admEdvm.Roles.Clear();
             admEdvm.Roles.Add("deptadmin");
             admEdvm.Roles.Add("sizadmin");
             admEdvm.Roles.Add("admin");
-
-
-
-            ViewData["Title"] = "Создание администратора (введите данные)";           
             return View("AdminDetails", admEdvm);
         }
+
+       
 
         // POST: AdminsEditController/AdminDelete(.....)
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AdminDelete(int Id)
+        public async Task<ActionResult> Delete(int Id)
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)

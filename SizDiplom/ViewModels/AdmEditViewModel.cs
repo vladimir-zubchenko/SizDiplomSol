@@ -21,7 +21,7 @@ namespace SizDiplom.ViewModels
         [Required(ErrorMessage = "Не указан Табельный номер")]
         public string TabNom { get; set; } = string.Empty;
 
-        public string DepartmentName { get; set; } = string.Empty;
+
 
 
         public int DepartmentId { get; set; } = 0;
@@ -34,5 +34,6 @@ namespace SizDiplom.ViewModels
         public string Password { get; set; } = string.Empty;
 
         public string Role { get; set; } = string.Empty;
+        public string DepartmentName { get; set; } = string.Empty;
     }
 }

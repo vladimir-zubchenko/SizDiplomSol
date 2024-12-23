@@ -31,12 +31,11 @@
                 </div>
                 <br />
                 <div>
-                    <label asp-for="DepartmentName">@Model.DepartmentName</label><br />
-                    <input type="text" asp-for="DepartmentName" value="@Model.DepartmentName" /><br />
-                    <label asp-for="DepartmentId">@Model.DepartmentId</label>
-                    <input type="number" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
-                    <label asp-for="Id">@Model.Id</label><br />
-                    <input type="number" asp-for="Id" value="@Model.Id" /><br />
+                   
+                    @* <label asp-for="DepartmentId">@Model.DepartmentId</label> *@
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
+                    @* <label asp-for="Id">@Model.Id</label><br /> *@
+                    <input type="hidden" asp-for="Id" value="@Model.Id" /><br />
                 </div>
                 <br />
                 <div>
@@ -46,14 +45,16 @@
                 </div>
                 <br />
                 <div>
-                    <label>Выберите роль</label><br />
+                    <label>Роль сейчас - @Model.Role</label>
+                    <label>Изменить роль на -</label><br />
                     <select id="Role" name="Role">
                         @foreach (string r in Model.Roles)
                         {
-                            <option value="@Model.Role">@r </option>
+                            <option value="@r">@r </option>
                         }
                     </select>
-                    @* <input type="hidden" asp-for="Role" value="@Model.Role" /> *@
+                    <br />
+                   
                 </div>
                 <br />
                 <br />
@@ -65,7 +66,7 @@
                 
                 <br />
                 <br />
-                <button formaction="Delete" formmethod="post">УДАЛИТЬ ДАННЫЕ АДМИНИСТРАТОРА</button>
+                <button type="submit" asp-action="Delete" asp-controller="AdminsEdit" formmethod="post">УДАЛИТЬ ДАННЫЕ АДМИНИСТРАТОРА</button>
             </div>
         </form>               
                 
