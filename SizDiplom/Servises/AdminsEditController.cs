@@ -126,6 +126,31 @@ namespace SizDiplom.Servises
             return View("AdminDetails", admEdvm);
         }
 
+        // POST: AdminsEditController/AdminDelete(.....)
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AdminDelete(int Id)
+        {
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            user = await db.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+            ViewData["Title"] = "Данные администратора удалены";
+            return RedirectToAction("Index");
+
+        }
+
 
     }
 }
