@@ -28,7 +28,7 @@
                     <span asp-validation-for="Name"></span><br /><br />
                 </div>
                 <div>
-                    <input type="number" asp-for="Id" /><br />
+                    <input type="hidden" asp-for="Id" /><br />
                 </div>
                 <button asp-action="Edit" type="submit" formmethod="post">Изменить название департамента</button>                
                 <button asp-action="Delete" type="submit" formmethod="post">Удалить департамент</button>

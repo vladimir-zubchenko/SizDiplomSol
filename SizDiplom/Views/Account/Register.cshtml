@@ -55,21 +55,15 @@
                     <label asp-for="ConfirmPassword">Повторите пароль</label><br />
                     <input asp-for="ConfirmPassword" /><br />
                     <span asp-validation-for="ConfirmPassword"></span>
-                </div>
-                <div class="form-group">
-                    
-                    <input type="text" asp-for="ControllerName" value="@Model.ControllerName" /><br />
-                    
-                </div>
-                <br />
+                    <input type="hidden" asp-for="ControllerName" value="@Model.ControllerName" /><br />
+                </div>                
                 <br />
                 <div>
-                    <input type="submit" value="ЗАРЕГИСТРИРОВАТЬ" />
-                    <br /> 
-                    <br />
+                    <input type="submit" value="ЗАРЕГИСТРИРОВАТЬ" /><br />                 
                 </div>
             </div>
         </form>
+        <br />
         <form>
              <button asp-controller="@Model.ControllerName" asp-action="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>
         </form>

@@ -29,15 +29,7 @@
                     <input type="text" asp-for="TabNom" /><br />
                     <span asp-validation-for="TabNom"></span>
                 </div>
-                <br />
-                <div>
-                   
-                    @* <label asp-for="DepartmentId">@Model.DepartmentId</label> *@
-                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
-                    @* <label asp-for="Id">@Model.Id</label><br /> *@
-                    <input type="hidden" asp-for="Id" value="@Model.Id" /><br />
-                </div>
-                <br />
+                <br />                
                 <div>
                     <label asp-for="Password">Введите пароль</label><br />
                     <input asp-for="Password" value="@Model.Password" /><br />
@@ -54,19 +46,17 @@
                         }
                     </select>
                     <br />
-                   
-                </div>
+                 
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" />                 
+                    <input type="hidden" asp-for="Id" value="@Model.Id" /><br />
+                </div>                  
                 <br />
-                <br />
+
                 <div>
-                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                    <input type="submit" value=" ИЗМЕНИТЬ ДАННЫЕ " />
+                    <button type="submit" asp-action="Delete" asp-controller="AdminsEdit" formmethod="post">УДАЛИТЬ ДАННЫЕ АДМИНИСТРАТОРА</button>
                 </div>
-                <br />
-                <br />
                 
-                <br />
-                <br />
-                <button type="submit" asp-action="Delete" asp-controller="AdminsEdit" formmethod="post">УДАЛИТЬ ДАННЫЕ АДМИНИСТРАТОРА</button>
             </div>
         </form>               
                 

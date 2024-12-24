@@ -49,7 +49,7 @@ namespace SizDiplom.Controllers
                 viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == Dep
                                         && s.NextCheckDate <= viewModel.CheckDate.AddDays(7)).ToListAsync();
 
-                ViewData["Title"] = $"Список СИЗ с истекающим сроком поверки для {user.Login} DeptAdminController.Index";
+                ViewData["Title"] = $"Список СИЗ с истекающим сроком поверки для {user.Login}";
              
                 return View(viewModel);
             }
@@ -65,6 +65,7 @@ namespace SizDiplom.Controllers
         [Authorize(Roles = "deptadmin")]
         public IActionResult NewSizCreateF() // форма для добавления СИЗ
         {
+            ViewData["Title"] = $"Создание записи для новогоСИЗ";
             return View();
         }
 
@@ -79,10 +80,11 @@ namespace SizDiplom.Controllers
                 User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
                 if (user != null)
                 {
+                    ViewData["Title"] = $"Создание записи для новогоСИЗ";
                     Siz? nSizCr = await db.Sizs.FirstOrDefaultAsync(s => s.TabNom == nSiz.TabNom);
                     if (nSizCr != null)
                     {
-
+                        
                         ViewData["SizSituated"] = "СИЗ С ТАКИМ НОМЕРОМ СУЩЕСТВУЕТ!!!";
                         await SizBelongTo(nSizCr);                        
 
@@ -118,6 +120,7 @@ namespace SizDiplom.Controllers
                 }
 
             }
+
             else return View("NewSizCreateF", nSiz);
         }
 
