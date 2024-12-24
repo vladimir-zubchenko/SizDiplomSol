@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SizDiplom.Models;
 using SizDiplom.ViewModels;
+using System.Runtime.Intrinsics.Arm;
 
 namespace SizDiplom.Controllers
 {
@@ -18,9 +19,11 @@ namespace SizDiplom.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "sizadmin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            //sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today.AddDays(7)).ToListAsync();
+            sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today).ToListAsync();
+            return View(sizVM);
         }
         // POST: SizAdminController/SizDetale(.....)
         [HttpPost]
@@ -37,13 +40,66 @@ namespace SizDiplom.Controllers
             Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.TabNom == SizNomber);
             if (siz == null)
             {
+                //ViewData["Title"] = "Работа с СИЗ";
                 ViewData["Warning"] = "СИЗ не найден проверьте инвентарный номер";
+                //sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today.AddDays(7)).ToListAsync();
+                sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today).ToListAsync();
                 return View("Index");
             }
             sizVM.Siz = siz;
             return View(sizVM);
+        }
+
+        
 
 
+        // POST: SizAdminController/SizEdit(.....)
+        [HttpPost]
+        [Authorize(Roles = "sizadmin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SizEdit(SizAdminViewModel sizVM)
+        {
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == sizVM.Siz.Id);
+            if (siz == null)
+            {
+                ViewData["Warning"] = "СИЗ не найден. Обрыв связи с базой данных (не удалось получить данные)";
+                sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today).ToListAsync();
+                return View("Index");
+            }
+            siz.NextCheckDate = sizVM.CheckDate;
+            db.Sizs.Update(siz);
+            await db.SaveChangesAsync();    
+
+            ViewData["Title"] = "Работа с СИЗ";
+            sizVM.Siz = siz;
+            sizVM.SizNomber = siz.TabNom;
+
+
+            return View("SizDetale", sizVM);
+
+        }
+
+        // POST: SizAdminController/CheckNewDate(.....)
+        [HttpPost]
+        [Authorize(Roles = "sizadmin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckNewDate(DateTime CheckDate)
+        {
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= CheckDate).ToListAsync();
+            sizVM.CheckDate = CheckDate;
+            return View("Index", sizVM);
 
         }
     }

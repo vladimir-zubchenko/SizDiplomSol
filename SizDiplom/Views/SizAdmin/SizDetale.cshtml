@@ -15,13 +15,13 @@
         <h2>@ViewData["Title"]</h2>
         <h2>@ViewData["Warning"]</h2>
         <br />
-        <form asp-action="Edit" asp-controller="SizAdmin" asp-anti-forgery="true">
+        <form asp-action="SizEdit" asp-controller="SizAdmin" asp-anti-forgery="true">
             <div class="validation" asp-validation-summary="ModelOnly"></div>
             <div>
                 <div>
                     <label>@Model.Siz.TabNom</label><input type="hidden" asp-for ="@Model.Siz.TabNom" value="@Model.Siz.TabNom" /><br />
                     <label>@Model.Siz.Name</label><input type="hidden" asp-for ="@Model.Siz.Name" value="@Model.Siz.Name" /><br />
-                    <label>Дата следующей поверки @Model.Siz.NextCheckDate</label><br />
+                    <label>Дата следующей поверки @Model.Siz.NextCheckDate.ToShortDateString()</label><br />
                     <label>Введите новую дату следующей поверки</label>
                     <input type="hidden" asp-for="@Model.Siz.NextCheckDate" value="@Model.Siz.NextCheckDate" /><br />
                     <<input type="date" asp-for="@Model.CheckDate" /><br />
@@ -34,7 +34,7 @@
                 </div>    
                 <br />               
                 <div>
-                    <button type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                    <input type="submit" formmethod="post" value="Изменить дату следующей поверки" >
                 </div>
                 
             </div>

@@ -11,18 +11,25 @@
 
     <div id="article">
 
-        <h2>@ViewData["Title"]</h2>         
+        <h2>@ViewData["Title"]</h2>   
         
-            <div>
 
-                <ol >
+        <h2>Список сиз с просроченной датой поверки на @Model.CheckDate.ToShortDateString()</h2>
+
+        
+        
+         <div>
+            <table class="table">
+                <tr><th>Инвентарный номер СИЗ</th><th>Дата следующей поверки</th><th>Название СИЗ</th></tr>
+
+               
                     @foreach (Siz siz in Model.alarmSizsList)
                     {
-                    <li> Инв.Номер @siz.TabNom ___ следующая поверка @siz.NextCheckDate.ToShortDateString() ___ СИЗ @siz.Name </li>
+                    <tr><td>@siz.TabNom </td> <td> @siz.NextCheckDate.ToShortDateString()</td> <td>@siz.Name </td></tr>
                     }
-                </ol>               
-            
-            </div>
+                            
+            </table>
+         </div>
             
      </div>  
      

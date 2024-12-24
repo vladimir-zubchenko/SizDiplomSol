@@ -13,11 +13,11 @@
 
     <div id="article">
 
-        <h2>Список сиз с просроченной датой поверки</h2>
+        <h2>Список сиз с просроченной датой поверки на @Model.CheckDate.ToShortDateString()</h2>
 
         <div>
             <table class="table">
-                <tr><th>Инв. номер СИЗ</th><th>Дата след. поверки</th><th>Название СИЗ</th></tr>
+                <tr><th>Инвентарный номер СИЗ</th><th>Дата следующей поверки</th><th>Название СИЗ</th></tr>
             
                 @foreach (Siz siz in Model.AlarmSizsList)
                 {
