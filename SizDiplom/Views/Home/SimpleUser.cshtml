@@ -1,6 +1,6 @@
 ﻿@model SizDiplom.ViewModels.UsersSizViewModel
 @{
-    ViewData["Title"] = "HomeController metod Index";
+    ViewData["Title"] = "Список СИЗ пользователя " + @Model.User.Login;
 }
 
 
@@ -19,6 +19,14 @@
         {
             <p>инв.номер - @s.TabNom ___ следующая поверка - @s.NextCheckDate.ToShortDateString() ___ СИЗ - @s.Name</p>
         }
+        <br />
+        <p>Просрочена поверка следующих СИЗ:</p>
+        @foreach (Siz s in Model.AlarmSizList)
+        {
+            <p>инв.номер - @s.TabNom ___ следующая поверка - @s.NextCheckDate.ToShortDateString() ___ СИЗ - @s.Name</p>
+        }
+        <br />
+        <br />
         <p>Для завершения работы выйдите из программы, воспользовавшись кнопкой </p>
     </div>
 </div>

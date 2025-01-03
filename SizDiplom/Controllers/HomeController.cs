@@ -27,13 +27,16 @@ namespace SizDiplom.Controllers
 
                 int usId = 0;
                 List<Siz> SizList = new List<Siz>();
-                User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+                List<Siz> AlarmSizList = new List<Siz>();
+
+
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
             {
                 usId = user.Id;
                 SizList = await db.Sizs.Where(s => s.UserId == usId).ToListAsync();
-
-                usSizModel = new UsersSizViewModel(user, SizList);
+                AlarmSizList = SizList.Where(s => s.NextCheckDate <= DateTime.Today).ToList();
+                usSizModel = new UsersSizViewModel(user, SizList, AlarmSizList);
 
             }
             else
