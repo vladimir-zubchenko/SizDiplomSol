@@ -23,6 +23,6 @@ namespace SizDiplom.ViewModels
 
         [Display(Name = "Введите инвентарный номер СИЗ")]
         public string SizNomber { get; set; } = string.Empty;  // инвентарный номер СИЗ для поиска в БД      
-
+        public string AlarmMessage { get; set; } = string.Empty;// Сообщение 
     }
 }

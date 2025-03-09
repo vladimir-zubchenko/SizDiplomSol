@@ -40,12 +40,15 @@ namespace SizDiplom.Controllers
             Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.TabNom == SizNomber);
             if (siz == null)
             {
-                //ViewData["Title"] = "Работа с СИЗ";
-                ViewData["Warning"] = "СИЗ не найден проверьте инвентарный номер";
+                
                 //sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today.AddDays(7)).ToListAsync();
                 sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today).ToListAsync();
-                return View("Index");
+                sizVM.AlarmMessage = "СИЗ не найден проверьте инвентарный номер";
+                sizVM.CheckDate = DateTime.Today;
+                return View("Index", sizVM);
+                
             }
+            
             sizVM.Siz = siz;
             return View(sizVM);
         }
