@@ -26,12 +26,10 @@
                 </div>
                 <br />
                 <div>
-                    <label asp-for="DepartmentName">@Model.DepartmentName</label><br /> 
-                    <input type="" asp-for="DepartmentName" value="@Model.DepartmentName" /><br />  
-                    <label asp-for="DepartmentId">@Model.DepartmentId</label>
-                    <input type="" asp-for="DepartmentId" value="@Model.DepartmentId"/><br />
-                    <label asp-for="Id">@Model.Id</label><br />
-                    <input type="" asp-for="Id" value="@Model.Id" /><br />
+                    <label asp-for="DepartmentName">@Model.DepartmentName</label>
+                    <input type="hidden" asp-for="DepartmentName" value="@Model.DepartmentName" />                  
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId"/>                    
+                    <input type="hidden" asp-for="Id" value="@Model.Id" /><br />
                 </div>
                 <br />
                 <div>
@@ -46,12 +44,10 @@
                 <br />
                 <br />
                 <div>
-                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
-                    
+                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ" />                    
                 </div>
-                <br />
-                <br />
-                <button formaction="Index" formmethod="get">Выйти БЕЗ ИЗМЕНЕНИЙ</button>
+                <br />                
+                <button formaction="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>
                 <br />
                 <br />
                 <button formaction="DeleteUser" formmethod="post">УДАЛИТЬ ДАННЫЕ РАБОТНИКА</button>

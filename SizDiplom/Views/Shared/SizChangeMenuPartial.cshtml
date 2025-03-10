@@ -46,13 +46,15 @@
         </div>
         <br />
         <div>
-            <label for="SizId">Model.SizId</label>
-            <input id="SizId" name="SizId" value="@Model.SizId"/>
+            @* <label for="SizId">Model.SizId</label> *@
+            <input type="hidden" id="SizId" name="SizId" value="@Model.SizId"/>
         </div>
         <br />
         <div>
 
             <button formaction="SizsBelongDelete" formmethod="post">Вывести СИЗ из распределения</button><br />
+            <br />
+            <br />
             <button formaction="Index" formmethod="post">Выйти без изменений</button>
             
         </div>

@@ -26,9 +26,9 @@ namespace SizDiplom.Controllers
             placeChViewModel = new PlaceChangeViewModel();
             carChViewModel = new CarChangeViewModel();
         }
-               
 
-          
+
+        [HttpGet]  
         [Authorize(Roles = "deptadmin")]
         public async Task<IActionResult> Index()// GET: DeptAdminController  вход для deptptadmin вывод просроченных СИЗ выбор дальнейшего пути
         {
@@ -39,7 +39,7 @@ namespace SizDiplom.Controllers
 
                 // await VMinit(user);
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
@@ -49,7 +49,7 @@ namespace SizDiplom.Controllers
                 viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == Dep
                                         && s.NextCheckDate <= viewModel.CheckDate.AddDays(7)).ToListAsync();
 
-                ViewData["Title"] = $"Список СИЗ с истекающим сроком поверки для {user.Login}";
+                ViewData["Title"] = $"Список СИЗ для {user.Login}";
              
                 return View(viewModel);
             }
@@ -61,7 +61,7 @@ namespace SizDiplom.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "deptadmin")]
         public IActionResult NewSizCreateF() // форма для добавления СИЗ
         {
@@ -543,7 +543,7 @@ namespace SizDiplom.Controllers
 
                 //await VMinit(user);
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
@@ -584,7 +584,7 @@ namespace SizDiplom.Controllers
 
                 //await VMinit(user);
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
@@ -625,7 +625,7 @@ namespace SizDiplom.Controllers
 
                 //await VMinit(user);
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
@@ -661,14 +661,14 @@ namespace SizDiplom.Controllers
 
                 //await VMinit(user);
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
 
                 viewModel.CheckDate = DateProm;
-                ViewData["Title"] = $"Список СИЗ с истекающим сроком поверки: на дату {viewModel.CheckDate.Date.ToShortDateString()} ";
-
+                ViewData["Title"] = $"Список СИЗ для {user.Login}";
+                ViewData["TitleMess"] = $"СИЗ с просроченной датой поверки на {viewModel.CheckDate.ToShortDateString()}";
                 return View("Index", viewModel);
             }
             else
@@ -702,7 +702,7 @@ namespace SizDiplom.Controllers
                     
                 }
 
-                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId).ToListAsync();
+                viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();

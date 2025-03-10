@@ -10,23 +10,11 @@
             <div>
 
                 <div class="form-group">
-                    <label for="SizId">Model.SizId</label>
-                    <input id="SizId" name="SizId" value="@Model.SizId" />
-                </div>
 
-                <div class="form-group">
-                    <label for="PlaceId">Model.PlaceId</label>
-                    <input id="PlaceId" name="PlaceId" value="@Model.PlaceId" />
-                </div>
-
-                <div class="form-group">
-                    <label for="CarId">Model.CarId</label>
-                    <input id="CarId" name="CarId" value="@Model.CarId" />
-                </div>
-
-                <div class="form-group">
-                    <label for="UserId">Model.UserId</label>
-                    <input id="UserId" name="UserId" value="@Model.UserId" />
+                    <input type="hidden" id="SizId" name="SizId" value="@Model.SizId" />  <br />
+                    <input type="hidden" id="PlaceId" name="PlaceId" value="@Model.PlaceId" />  <br />
+                    <input type="hidden" id="CarId" name="CarId" value="@Model.CarId" />    <br />
+                    <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" /><br />
                 </div>
 
 
@@ -34,6 +22,8 @@
                 <div>
 
                     <button formaction="Index" formmethod="post">Распределено верно</button><br />
+                    <br />
+                    <br />
                     <button formaction="SelectedSiz" formmethod="post">Распределить заново</button>
 
                 </div>

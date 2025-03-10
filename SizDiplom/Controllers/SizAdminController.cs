@@ -43,7 +43,8 @@ namespace SizDiplom.Controllers
                 
                 //sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today.AddDays(7)).ToListAsync();
                 sizVM.AlarmSizsList = await db.Sizs.Where(s => s.NextCheckDate <= DateTime.Today).ToListAsync();
-                sizVM.AlarmMessage = "СИЗ не найден проверьте инвентарный номер";
+                
+                ViewData["Warning"] = "СИЗ не найден проверьте инвентарный номер";
                 sizVM.CheckDate = DateTime.Today;
                 return View("Index", sizVM);
                 

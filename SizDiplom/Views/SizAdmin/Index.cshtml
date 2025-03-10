@@ -13,7 +13,8 @@
 
     <div id="article">
 
-       <h2>@Model.AlarmMessage</h2>
+         @* <h2>@Model.AlarmMessage</h2> *@
+        <h2>@ViewData["Warning"]</h2>
 
         <h2>Список сиз с просроченной датой поверки на @Model.CheckDate.ToShortDateString()</h2>
 
