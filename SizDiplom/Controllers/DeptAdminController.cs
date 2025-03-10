@@ -128,11 +128,11 @@ namespace SizDiplom.Controllers
 
         [HttpPost]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> ChangeUserF(DepartAdminViewModel viewModel)  // форма изменить данные работника
+        public async Task<IActionResult> ChangeUserF(int UserId)  // форма изменить данные работника
         {
             if (!ModelState.IsValid)
             {
-                User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == viewModel.UserId);
+                User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -234,11 +234,11 @@ namespace SizDiplom.Controllers
 
         [HttpPost]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> ChangePlaceF(DepartAdminViewModel viewModel) // форма изменить данные склада
+        public async Task<IActionResult> ChangePlaceF(int PlaceId) // форма изменить данные склада
         {
             if (!ModelState.IsValid)
             {
-                Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == viewModel.PlaceId);
+                Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == PlaceId);
                 if (pl == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -375,11 +375,11 @@ namespace SizDiplom.Controllers
 
         [HttpPost]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> ChangeCarF(DepartAdminViewModel viewModel)
+        public async Task<IActionResult> ChangeCarF(int CarId)
         {
             if (!ModelState.IsValid)
             {
-                Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == viewModel.CarId);
+                Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == CarId);
                 if (car == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -524,7 +524,7 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> UsersSizs(DepartAdminViewModel viewModel) //список СИЗ выбранного работника
+        public async Task<IActionResult> UsersSizs(int UserId) //список СИЗ выбранного работника
         {
             
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
@@ -532,8 +532,8 @@ namespace SizDiplom.Controllers
             {
                 // формируем список СИЗ работника 
                 viewModel.alarmSizsList.Clear();
-                viewModel.alarmSizsList = await db.Sizs.Where(s => s.UserId == viewModel.UserId).ToListAsync();
-                var UserFoName = await db.Users.FirstOrDefaultAsync(u => u.Id == viewModel.UserId);
+                viewModel.alarmSizsList = await db.Sizs.Where(s => s.UserId == UserId).ToListAsync();
+                var UserFoName = await db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
                 if (UserFoName == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -565,7 +565,7 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> PlaceSizs(DepartAdminViewModel viewModel) //список СИЗ выбранного склада
+        public async Task<IActionResult> PlaceSizs(int PlaceId) //список СИЗ выбранного склада
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
@@ -573,8 +573,8 @@ namespace SizDiplom.Controllers
                 
                 // формируем список СИЗ склада 
                 viewModel.alarmSizsList.Clear();
-                viewModel.alarmSizsList = await db.Sizs.Where(s => s.PlaceId == viewModel.PlaceId).ToListAsync();
-                var PlaceFoName = await db.Places.FirstOrDefaultAsync(p => p.Id == viewModel.PlaceId);
+                viewModel.alarmSizsList = await db.Sizs.Where(s => s.PlaceId == PlaceId).ToListAsync();
+                var PlaceFoName = await db.Places.FirstOrDefaultAsync(p => p.Id == PlaceId);
                 if (PlaceFoName == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -606,7 +606,7 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> CarSizs(DepartAdminViewModel viewModel) //список СИЗ выбранного автомобиля
+        public async Task<IActionResult> CarSizs(int CarId) //список СИЗ выбранного автомобиля
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
@@ -614,8 +614,8 @@ namespace SizDiplom.Controllers
                 
                 // формируем список СИЗ автомобиля 
                 viewModel.alarmSizsList.Clear();
-                viewModel.alarmSizsList = await db.Sizs.Where(s => s.CarId == viewModel.CarId).ToListAsync();
-                var CarFoName = await db.Cars.FirstOrDefaultAsync(u => u.Id == viewModel.CarId);
+                viewModel.alarmSizsList = await db.Sizs.Where(s => s.CarId == CarId).ToListAsync();
+                var CarFoName = await db.Cars.FirstOrDefaultAsync(c => c.Id == CarId);
                 if (CarFoName == null)
                 {
                     ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
@@ -647,7 +647,7 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> CheckDateSizs(DepartAdminViewModel viewModel) //список СИЗ с просроченной датой поверки
+        public async Task<IActionResult> CheckDateSizs(DateTime CheckDate) //список СИЗ с просроченной датой поверки
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
@@ -656,8 +656,8 @@ namespace SizDiplom.Controllers
                 // формируем список СИЗ  с просроченной датой поверки
                 viewModel.alarmSizsList.Clear();
                 viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId
-                                                            && s.NextCheckDate <= viewModel.CheckDate).ToListAsync();
-                var DateProm = viewModel.CheckDate;
+                                                            && s.NextCheckDate <= CheckDate).ToListAsync();
+                var DateProm = CheckDate;
 
                 //await VMinit(user);
 
@@ -666,7 +666,7 @@ namespace SizDiplom.Controllers
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
 
-                viewModel.CheckDate = DateProm;
+                viewModel.CheckDate = CheckDate;
                 ViewData["Title"] = $"Список СИЗ для {user.Login}";
                 ViewData["TitleMess"] = $"СИЗ с просроченной датой поверки на {viewModel.CheckDate.ToShortDateString()}";
                 return View("Index", viewModel);
@@ -683,7 +683,7 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> SelectedSiz(DepartAdminViewModel viewModel) //данные выбранного СИЗ
+        public async Task<IActionResult> SelectedSiz(int SizId) //данные выбранного СИЗ
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
@@ -692,7 +692,7 @@ namespace SizDiplom.Controllers
 
                 viewModel.alarmSizsList.Clear();
                 // получаем выбранный СИЗ из БД                
-                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == viewModel.SizId);
+                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == SizId);
                 if (prSiz != null)
                 {                    
                     viewModel.alarmSizsList.Add(prSiz);// заполняем "список" к показу - один элемент 
