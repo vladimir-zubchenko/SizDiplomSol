@@ -707,7 +707,7 @@ namespace SizDiplom.Controllers
                 viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
                 viewModel.CheckDate = DateTime.Today;
-
+                viewModel.SizId = SizId;
                 ViewData["Title"] = $"Страница просмотра и редактирования данных СИЗ";
 
                 return View(viewModel);
@@ -725,19 +725,20 @@ namespace SizDiplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> SizsUserIdChange(DepartAdminViewModel viewModel) // передать СИЗ работнику
+        public async Task<IActionResult> SizsUserIdChange(int UserId,int SizId) // передать СИЗ работнику
         {
-                    viewModel.PlaceId = 0;
-                    viewModel.CarId = 0;
 
-            if (viewModel.UserId > 0) 
+            if (UserId > 0) 
             {                
-                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == viewModel.SizId);
+                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == SizId);
                 if (prSiz != null )
                 {
-                    prSiz.UserId = viewModel.UserId;// выбранный в селекте
+                    prSiz.UserId = UserId;// выбранный в селекте
                     prSiz.PlaceId = 0;
                     prSiz.CarId = 0;
+                    viewModel.PlaceId = 0;
+                    viewModel.CarId = 0;
+                    viewModel.SizId= SizId;
                     db.Sizs.Update(prSiz);
                     await db.SaveChangesAsync();
                     ViewData["Title"] = $"Новые данные СИЗ";
@@ -766,18 +767,19 @@ namespace SizDiplom.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
 
-        public async Task<IActionResult> SizsPlaceIdChange(DepartAdminViewModel viewModel)  // передать СИЗ на склад
+        public async Task<IActionResult> SizsPlaceIdChange(int PlaceId, int SizId)  // передать СИЗ на склад
         {
-            if (viewModel.PlaceId > 0)
+            if (PlaceId > 0)
             {
-                    viewModel.UserId = 0;
-                    viewModel.CarId = 0;
-                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == viewModel.SizId);
+                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == SizId);
                 if (prSiz != null)
                 {
-                    prSiz.PlaceId = viewModel.PlaceId; // выбранный в селекте
+                    prSiz.PlaceId = PlaceId; // выбранный в селекте
                     prSiz.UserId = 0;
                     prSiz.CarId = 0;
+                    viewModel.UserId = 0;
+                    viewModel.CarId = 0;
+                    viewModel.SizId = SizId;
                     db.Sizs.Update(prSiz);
                     await db.SaveChangesAsync();
                     ViewData["Title"] = $"Новые данные СИЗ";
@@ -838,16 +840,17 @@ namespace SizDiplom.Controllers
         }
 
 
-        public async Task<IActionResult> SizsBelongDelete(DepartAdminViewModel viewModel) // изъять СИЗ  
+        public async Task<IActionResult> SizsBelongDelete(int SizId) // изъять СИЗ  
         {
-            if (viewModel.SizId > 0)
+            if (SizId > 0)
             {
-                viewModel.CarId = 0;
-                viewModel.UserId = 0;
-                viewModel.PlaceId = 0;
-                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == viewModel.SizId);
+                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == SizId);
                 if (prSiz != null)
                 {
+                    viewModel.CarId = 0;
+                    viewModel.UserId = 0;
+                    viewModel.PlaceId = 0;
+                    viewModel.SizId = SizId;
                     prSiz.PlaceId = 0;
                     prSiz.UserId = 0;
                     prSiz.CarId = 0;  
