@@ -8,6 +8,7 @@
     </div>
 
     <div id="article">
+        <h2>@ViewData["CarMessage"]</h2>
         <h2>Измените данные ниже</h2><br /><br />
 
         <form asp-action="ChangeCar" asp-controller="DeptAdmin" asp-anti-forgery="true">
@@ -25,26 +26,28 @@
                     <span asp-validation-for="Description"></span>
                 </div>
                 <br />
-                <div>
-                    <label asp-for="DepartmentId">@Model.DepartmentId</label><br />
-                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
-
-                    <label asp-for="Id">@Model.Id</label><br />
+                <div>                    
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" />                    
                     <input type="hidden" asp-for="Id" value="@Model.Id" />
                 </div>
                 <br />
                 <br />
                 <div>
-                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ submit" />
+                    <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ" />
 
                 </div>
-                <br />
-                <br />
-                <button asp-action="Index" formmethod="get">Выйти БЕЗ ИЗМЕНЕНИЙ</button>
-                <br />
-                <br />
-                <button asp-action="DeleteCar" formmethod="post">УДАЛИТЬ ДАННЫЕ АВТОМОБИЛЯ</button>
             </div>
+        </form>
+                <br />
+                <br />
+        <form asp-action="Index" asp-controller="DeptAdmin">
+            <button formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>
+        </form>
+                <br />
+                <br />
+        <form asp-action="DeleteCar" asp-controller="DeptAdmin">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <button type="submit" asp-action="DeleteCar" formmethod="post">УДАЛИТЬ ДАННЫЕ АВТОМОБИЛЯ</button>
         </form>
 
 

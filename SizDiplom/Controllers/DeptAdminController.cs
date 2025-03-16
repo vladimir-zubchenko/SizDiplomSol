@@ -16,6 +16,7 @@ namespace SizDiplom.Controllers
         private UserChangeViewModel userChViewModel;
         private PlaceChangeViewModel placeChViewModel;
         private CarChangeViewModel carChViewModel;
+        private NewSizCreateViewModel newSizCreateViewModel;
 
 
         public DeptAdminController(ProgDBaseContext context)
@@ -25,6 +26,7 @@ namespace SizDiplom.Controllers
             userChViewModel = new UserChangeViewModel();
             placeChViewModel = new PlaceChangeViewModel();
             carChViewModel = new CarChangeViewModel();
+            newSizCreateViewModel = new NewSizCreateViewModel();
         }
 
 
@@ -49,7 +51,7 @@ namespace SizDiplom.Controllers
                 viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == Dep
                                         && s.NextCheckDate <= viewModel.CheckDate.AddDays(7)).ToListAsync();
 
-                ViewData["Title"] = $"Список СИЗ для {user.Login}";
+                ViewData["Title"] = $"Список СИЗ с истёкшим сроком поверки для {user.Login}";
              
                 return View(viewModel);
             }
@@ -61,14 +63,35 @@ namespace SizDiplom.Controllers
 
         }
 
+        //[HttpGet]
+        //[Authorize(Roles = "deptadmin")]
+        //public async Task<IActionResult> NewSizCreateFAsync() // форма для добавления СИЗ
+        //{
+        //    User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+        //    if (user == null)
+        //    {
+        //        ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+        //        return RedirectToAction("Login", "Account");
+        //    }
+        //    ViewData["Title"] = "Создание записи для новогоСИЗ";
+        //    newSizCreateViewModel.DepartmentId = user.DepartmentId;
+        //    return View("NewSizCreateFAsync", newSizCreateViewModel);
+        //}
+
         [HttpGet]
         [Authorize(Roles = "deptadmin")]
-        public IActionResult NewSizCreateF() // форма для добавления СИЗ
+        public async Task<IActionResult> NewSizCreate()
         {
-            ViewData["Title"] = $"Создание записи для новогоСИЗ";
-            return View();
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            ViewData["Title"] = "Создание записи для новогоСИЗ";
+            newSizCreateViewModel.DepartmentId = user.DepartmentId;
+            return View("NewSizCreate", newSizCreateViewModel);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -88,7 +111,7 @@ namespace SizDiplom.Controllers
                         ViewData["SizSituated"] = "СИЗ С ТАКИМ НОМЕРОМ СУЩЕСТВУЕТ!!!";
                         await SizBelongTo(nSizCr);                        
 
-                        return View("NewSizCreateF", nSiz);
+                        return View("NewSizCreate", nSiz);
                     }
                     else 
                     {
@@ -110,7 +133,7 @@ namespace SizDiplom.Controllers
                         }
                         ViewData["SizSituated"] = "СИЗ ВНЕСЁН В БАЗУ ДАННЫХ";
                         await SizBelongTo(nSizCr);
-                        return View("NewSizCreateF", nSiz);
+                        return View("NewSizCreate", nSiz);
                     }
                 }
                 else
@@ -121,7 +144,7 @@ namespace SizDiplom.Controllers
 
             }
 
-            else return View("NewSizCreateF", nSiz);
+            else return View("NewSizCreate", nSiz);
         }
 
 
@@ -130,7 +153,13 @@ namespace SizDiplom.Controllers
         [Authorize(Roles = "deptadmin")]
         public async Task<IActionResult> ChangeUserF(int UserId)  // форма изменить данные работника
         {
-            if (!ModelState.IsValid)
+            User? userDa = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (userDa == null)
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+            if (UserId > 0)
             {
                 User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == UserId);
                 if (user == null)
@@ -152,8 +181,9 @@ namespace SizDiplom.Controllers
                 }
                 userChViewModel.DepartmentName = dep.Name;
                 
+                return View(userChViewModel);
             }
-            return View(userChViewModel);
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpPost]
@@ -170,15 +200,16 @@ namespace SizDiplom.Controllers
 
             if (!ModelState.IsValid) 
             {
-                ModelState.AddModelError("", "Полученные данные некорректны)");
-                //return RedirectToAction("Index"); 
+                ModelState.AddModelError("", "Полученные данные некорректны)");                 
                 return View("ChangeUserF", userChangeViewModel);
             }
+
             user = await db.Users.FirstOrDefaultAsync(u => u.Id == userChangeViewModel.Id);
             if (user == null)
             {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-                return RedirectToAction("Index", "DeptAdmin");
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Такого работника нет в базе данных (не удалось получить данные)";
+                return View("ErrorMess");
             }
             user.Login = userChangeViewModel.Login;
             user.Password = userChangeViewModel.Password;
@@ -187,15 +218,16 @@ namespace SizDiplom.Controllers
             user.Role = userChangeViewModel.Role;
             db.Users.Update(user);
             await db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            ViewData["Title"] = $"Сообщение для {user.Login}";
+            ViewData["TitleMess"] = "Изменения внесены в базу данных";
+            return View("ErrorMess");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> DeleteUser(UserChangeViewModel userChangeViewModel) // удалить данные работника
+        public async Task<IActionResult> DeleteUser(int Id) // удалить данные работника
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
@@ -203,28 +235,34 @@ namespace SizDiplom.Controllers
                 ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
                 return RedirectToAction("Login", "Account");
             }
-            if (!ModelState.IsValid)
+            if (Id <= 0)
             {
-                ModelState.AddModelError("", "Полученные данные некорректны!!!");                
-                return RedirectToAction("ChangeUser", userChangeViewModel); 
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Полученные данные некорректны!";
+                return View("ErrorMess");
             }
-            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.UserId == userChangeViewModel.Id);
+            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.UserId == Id);
             if (siz != null)
             {
-                ModelState.AddModelError("", "За работником закреплены СИЗ!!!");
-                return RedirectToAction("ChangeUser", userChangeViewModel); 
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "За работником закреплены СИЗ!";
+                return View("ErrorMess");
             }
-            user = await db.Users.FirstOrDefaultAsync(u => u.Id == userChangeViewModel.Id);
+
+            user = await db.Users.FirstOrDefaultAsync(u => u.Id == Id);
             if (user != null) 
             { 
                 db.Users.Remove(user);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ViewData["Title"] = "Выполнено";
+                ViewData["TitleMess"] = "Данные удалены из базы";
+                return View("ErrorMess");
             }
             else
             {
-                ModelState.AddModelError("", "Такого работника нет в базе (не удалось получить данные)");
-                return RedirectToAction("ChangeUser", userChangeViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Не удалось получить данные";
+                return View("ErrorMess");                
             }
             
         }
@@ -233,25 +271,33 @@ namespace SizDiplom.Controllers
 
 
         [HttpPost]
+        
         [Authorize(Roles = "deptadmin")]
         public async Task<IActionResult> ChangePlaceF(int PlaceId) // форма изменить данные склада
         {
-            if (!ModelState.IsValid)
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (PlaceId > 0)
             {
                 Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == PlaceId);
                 if (pl == null)
                 {
-                    ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-                    return RedirectToAction("Login", "Account");
+                    ViewData["Title"] = "Ошибка!";
+                    ViewData["TitleMess"] = "Нет такого склада в базе данных (не удалось получить данные)";
+                    return View("ErrorMess");
                 }
                 placeChViewModel.Id = pl.Id;
                 placeChViewModel.DepartmentId = pl.DepartmentId;
                 placeChViewModel.Name = pl.Name;
-                placeChViewModel.Description = pl.Description;
+                placeChViewModel.Description = pl.Description;                
                 
-                
+                return View(placeChViewModel);
             }
-            return View(placeChViewModel);
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpPost]
@@ -261,65 +307,87 @@ namespace SizDiplom.Controllers
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
-            {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+            {                
                 return RedirectToAction("Login", "Account");
             }
 
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Полученные данные некорректны)");                 
-                return View(plChViewModel);
+                ModelState.AddModelError("", "Полученные данные некорректны)");
+                return View("ChangePlaceF", plChViewModel);
             }
+
             Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == plChViewModel.Id);
             if (pl == null)
             {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-                return RedirectToAction("Index", "DeptAdmin");
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Такого склада нет в базе данных (не удалось получить данные)";
+                return View("ErrorMess");
             }
             pl.Name = plChViewModel.Name;
             pl.Description = plChViewModel.Description;
             
             db.Places.Update(pl);
             await db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-
+            ViewData["Title"] = "Выполнено";
+            ViewData["TitleMess"] = "Изменения внесены в базу данных";
+            return View("ErrorMess");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> DeletePlace(PlaceChangeViewModel plChViewModel)
+        public async Task<IActionResult> DeletePlace(int Id)
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
             {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                //ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
                 return RedirectToAction("Login", "Account");
             }
-            if (!ModelState.IsValid)
+            
+            if (Id <= 0)
             {
-                ModelState.AddModelError("", "Полученные данные некорректны!!!");
-                return View("ChangePlaceF", plChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Полученные данные некорректны!";
+                return View("ErrorMess");
             }
-            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.PlaceId == plChViewModel.Id);
+            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.PlaceId == Id);
             if (siz != null)
             {
-                ModelState.AddModelError("", "За складом закреплены СИЗ!!!");                
-                return View("ChangePlaceF", plChViewModel);
+                //Place? place = await db.Places.FirstOrDefaultAsync(p => p.Id == Id);
+                //if (place == null)
+                //{
+                //    ViewData["Title"] = "Ошибка!";
+                //    ViewData["TitleMess"] = "Не удалось получить данные о складе!";
+                //    return View("ErrorMess");
+                //}
+                //placeChViewModel.Id = place.Id;
+                //placeChViewModel.DepartmentId = place.DepartmentId;
+                //placeChViewModel.Name = place.Name;
+                //placeChViewModel.Description = place.Description;                
+                //ViewData["PlaceMessage"] = "За складом закреплены СИЗ!!!";
+                //return View("ChangePlaceF", placeChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "За складом закреплены СИЗ!";
+                return View("ErrorMess");
+
             }
-            Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == plChViewModel.Id);
+
+            Place? pl = await db.Places.FirstOrDefaultAsync(p => p.Id == Id);
             if (pl != null)
             {
                 db.Places.Remove(pl);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ViewData["Title"] = "Выполнено";
+                ViewData["TitleMess"] = "Данные удалены из базы";
+                return View("ErrorMess");
             }
             else
             {
-                ModelState.AddModelError("", "Такого склада нет в базе (не удалось получить данные)");
-                return View("ChangePlaceF", plChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Такого склада нет в базе данных (не удалось получить данные)";
+                return View("ErrorMess");
             }
 
         }
@@ -369,7 +437,10 @@ namespace SizDiplom.Controllers
                                 DepartmentId = plChViewModel.DepartmentId};
             db.Places.Add(place);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            ViewData["Title"] = "Выполнено";
+            ViewData["TitleMess"] = "Данные внесены в базу";
+            return View("ErrorMess");
+            
         }
 
 
@@ -377,7 +448,7 @@ namespace SizDiplom.Controllers
         [Authorize(Roles = "deptadmin")]
         public async Task<IActionResult> ChangeCarF(int CarId)
         {
-            if (!ModelState.IsValid)
+            if (CarId > 0)
             {
                 Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == CarId);
                 if (car == null)
@@ -389,8 +460,9 @@ namespace SizDiplom.Controllers
                 carChViewModel.DepartmentId = car.DepartmentId;
                 carChViewModel.CarNomber = car.CarNomber;
                 carChViewModel.Description = car.Description;
+                return View(carChViewModel);
             }
-            return View(carChViewModel);
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpPost]
@@ -407,30 +479,32 @@ namespace SizDiplom.Controllers
 
             if (!ModelState.IsValid)
             {
-                carChViewModel.DepartmentId = user.DepartmentId;
                 ModelState.AddModelError("", "Полученные данные некорректны)");
                 return View("ChangeCarF", carChViewModel);
             }
+
             Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == carChViewModel.Id);
             if (car == null)
             {
-                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-                return RedirectToAction("Index", "DeptAdmin");
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Такого автомобиля нет в базе данных (не удалось получить данные)";
+                return View("ErrorMess");
             }
             car.CarNomber = carChViewModel.CarNomber;
             car.Description = carChViewModel.Description;
 
             db.Cars.Update(car);
             await db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            ViewData["Title"] = "Выполнено";
+            ViewData["TitleMess"] = "Изменения внесены в базу данных";
+            return View("ErrorMess");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> DeleteCar(CarChangeViewModel carChViewModel)
+        public async Task<IActionResult> DeleteCar(int Id)
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
@@ -438,29 +512,47 @@ namespace SizDiplom.Controllers
                 ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
                 return RedirectToAction("Login", "Account");
             }
-            if (!ModelState.IsValid)
+            if (Id <= 0)
             {
-                carChViewModel.DepartmentId = user.DepartmentId;
-                ModelState.AddModelError("", "Полученные данные некорректны!!!");
-                return View("ChangeCarF", carChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Полученные данные некорректны!";
+                return View("ErrorMess");
             }
-            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.CarId == carChViewModel.Id);
+            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.CarId == Id);
             if (siz != null)
             {
-                ModelState.AddModelError("", "За автомобилем закреплены СИЗ!!!");
-                return View("ChangeCarF", carChViewModel);
+                //Car? carF = await db.Cars.FirstOrDefaultAsync(c => c.Id == Id);
+                //if(carF == null)
+                //{
+                //    ViewData["Title"] = "Ошибка!";
+                //    ViewData["TitleMess"] = "Не удалось получить данные об автомобиле!";
+                //    return View("ErrorMess");
+
+                //}
+                //carChViewModel.Id = carF.Id;
+                //carChViewModel.DepartmentId = carF.DepartmentId;
+                //carChViewModel.CarNomber = carF.CarNomber;
+                //carChViewModel.Description = carF.Description;
+                //ViewData["CarMessage"] = "За автомобилем закреплены СИЗ!";
+                //return View("ChangeCarF", carChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "За автомобилем закреплены СИЗ!";
+                return View("ErrorMess");
             }
-            Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == carChViewModel.Id);
+            Car? car = await db.Cars.FirstOrDefaultAsync(c => c.Id == Id);
             if (car != null)
             {
                 db.Cars.Remove(car);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ViewData["Title"] = "Выполнено";
+                ViewData["TitleMess"] = "Данные удалены из базы";
+                return View("ErrorMess");                
             }
             else
             {
-                ModelState.AddModelError("", "Такого автомобиля нет в базе (не удалось получить данные)");
-                return View("ChangeCarF", carChViewModel);
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Не удалось получить данные об автомобиле!";
+                return View("ErrorMess");
             }
 
         }
@@ -514,7 +606,10 @@ namespace SizDiplom.Controllers
             };
             db.Cars.Add(car);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            ViewData["Title"] = "Выполнено";
+            ViewData["TitleMess"] = "Данные внесены в базу";
+            return View("ErrorMess");
+            
         }
 
 
@@ -839,6 +934,45 @@ namespace SizDiplom.Controllers
             }
         }
 
+        public async Task<IActionResult> SizDelete(int SizId)
+        {
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user == null)
+            {                
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (SizId <= 0)
+            {
+                ViewData["Title"] = "Ошибка!";
+                ViewData["TitleMess"] = "Полученные данные некорректны!";
+                return View("ErrorMess");
+            }
+            Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.Id == SizId);
+            if (siz != null)
+            {
+                if(siz.UserId > 0 || siz.CarId > 0 || siz.PlaceId >0) 
+                { 
+                    ViewData["Title"] = "Ошибка!";
+                    ViewData["TitleMess"] = "Невозможно удалить. СИЗ распределён!";
+                    return View("ErrorMess");
+                }
+                else if(siz.UserId < 0 || siz.CarId < 0 || siz.PlaceId < 0)
+                {
+                    ViewData["Title"] = "Ошибка!";
+                    ViewData["TitleMess"] = "Полученные данные некорректны!";
+                    return View("ErrorMess");
+                }
+                db.Sizs.Remove(siz);
+                await db.SaveChangesAsync();
+                ViewData["Title"] = "Выполнено";
+                ViewData["TitleMess"] = "Данные удалены из базы";
+                return View("ErrorMess");
+            }
+            ViewData["Title"] = "Ошибка!";
+            ViewData["TitleMess"] = "Получены данные некорректны!(ошибка связи)";
+            return View("ErrorMess");
+        }
 
         public async Task<IActionResult> SizsBelongDelete(int SizId) // изъять СИЗ  
         {

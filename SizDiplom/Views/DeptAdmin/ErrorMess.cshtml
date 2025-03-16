@@ -1,0 +1,23 @@
+﻿@model SizDiplom.ViewModels.UserChangeViewModel
+
+<div class="wrapper">
+
+    <div id="sidebar" class="aside">
+        <h2>Страница сообщений </h2>
+        <br />
+        <br />       
+        <form asp-action="Index" asp-controller="DeptAdmin">
+            <button formmethod="get">Продолжить работу</button>
+        </form>
+    </div>
+
+    <div id="article">
+        <br />
+        <br />
+        <h2>@ViewData["Title"]</h2>
+        <br />
+        <br />
+        <h2>@ViewData["TitleMess"]</h2>
+
+    </div>
+</div>

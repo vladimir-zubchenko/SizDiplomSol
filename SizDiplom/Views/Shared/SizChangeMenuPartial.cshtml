@@ -51,17 +51,19 @@
 </form>
         <br />
 <form asp-action="" asp-controller="DeptAdmin">
-        <div>
-            
+        <div>            
             <input type="hidden" id="SizId" name="SizId" value="@Model.SizId"/>
         </div>
         <br />
         <div>
 
-            <button formaction="SizsBelongDelete" formmethod="post">Вывести СИЗ из распределения</button><br />
+            <button asp-action="SizsBelongDelete" formmethod="post">Вывести СИЗ из распределения</button><br />
             <br />
             <br />
-            <button formaction="Index" formmethod="get">Выйти без изменений</button>
+            <button asp-action="Index" formmethod="get">Выйти без изменений</button>
+            <br />
+            <br />
+            <button asp-action="SizDelete" formmethod="post">Удалить СИЗ</button>
             
         </div>
 </form>

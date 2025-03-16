@@ -21,6 +21,6 @@ namespace SizDiplom.ViewModels
         [Display(Name = "Выберите Дату следующей поверки")]
         [DataType(DataType.Date)]
         public DateTime CheckDate { get; set; } = DateTime.Today;
-
+        public int DepartmentId { get; set; }
     }
 }

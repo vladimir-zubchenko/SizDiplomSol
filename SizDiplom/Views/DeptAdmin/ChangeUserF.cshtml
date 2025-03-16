@@ -8,6 +8,7 @@
     </div>
 
     <div id="article">
+        <h2>@ViewData["UserMessage"]</h2>
         <h2>Измените регистрационные данные ниже</h2>
 
         <form asp-action="ChangeUser" asp-controller="DeptAdmin" asp-anti-forgery="true">
@@ -46,14 +47,17 @@
                 <div>
                     <input type="submit" value="ИЗМЕНИТЬ ДАННЫЕ" />                    
                 </div>
-                <br />                
-                <button formaction="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>
-                <br />
-                <br />
-                <button formaction="DeleteUser" formmethod="post">УДАЛИТЬ ДАННЫЕ РАБОТНИКА</button>
             </div>
         </form>
-
-
+                <br /> 
+        <form asp-action="Index" asp-controller="DeptAdmin">
+             <button formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>
+        </form>
+                <br />
+                <br />
+        <form asp-action="DeleteUser" asp-controller="DeptAdmin">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />           
+            <button type="submit" formmethod="post">УДАЛИТЬ ДАННЫЕ РАБОТНИКА</button>
+        </form>
     </div>
 </div>

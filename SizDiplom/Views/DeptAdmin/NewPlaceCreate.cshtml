@@ -8,8 +8,8 @@
     </div>
 
     <div id="article">
-        <h2>Внесите данные склада ниже</h2><br /><br />
-
+        <h2>Введите регистрационные данные ниже</h2>
+        <br /><br />
         <form asp-action="NewPlaceCreate" asp-controller="DeptAdmin" asp-anti-forgery="true">
             <div class="validation" asp-validation-summary="ModelOnly"></div>
             <div>
@@ -25,22 +25,18 @@
                     <span asp-validation-for="Description"></span>
                 </div>
                 <br />
-                <div>
-                    <label asp-for="DepartmentId">@Model.DepartmentId</label><br />
-                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" /><br />
-
-                    <label asp-for="Id">@Model.Id</label><br />
+                <div>                    
+                    <input type="hidden" asp-for="DepartmentId" value="@Model.DepartmentId" />                   
                     <input type="hidden" asp-for="Id" value="@Model.Id" />
                 </div>
                 <br />
                 <br />
                 <div>
-                    <input type="submit" value="ДОБАВИТЬ В БАЗУ ДАННЫХ" />
-
+                    <input type="submit" formmethod="post" value="СОХРАНИТЬ ДАННЫЕ" />
                 </div>
                 <br />
                 <br />
-                <button formaction="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>               
+                <button asp-action="Index" formmethod="get">ВЫЙТИ БЕЗ ИЗМЕНЕНИЙ</button>               
                 
             </div>
         </form>
