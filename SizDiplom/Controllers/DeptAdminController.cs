@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using SizDiplom.Models;
 using SizDiplom.ViewModels;
 
@@ -774,6 +775,44 @@ namespace SizDiplom.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "deptadmin")]
+        public async Task<IActionResult> SelSizByNom(string Nomber)
+        {
+            User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
+            if (user != null)
+            {                              
+                Siz? prSiz = await db.Sizs.FirstOrDefaultAsync(s => s.TabNom == Nomber);
+                if (prSiz != null)
+                {
+                    viewModel.alarmSizsList.Clear();
+                    viewModel.alarmSizsList.Add(prSiz);// заполняем "список" к показу - один элемент 
+                    // определяем , куда распределён СИЗ
+                    await SizBelongTo(prSiz);
+
+                    viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
+                    viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
+                    viewModel.carsList = await db.Cars.Where(c => c.DepartmentId == user.DepartmentId).ToListAsync();
+                    viewModel.placesList = await db.Places.Where(p => p.DepartmentId == user.DepartmentId).ToListAsync();
+                    viewModel.CheckDate = DateTime.Today;
+                    viewModel.SizId = prSiz.Id;
+                    ViewData["Title"] = $"Страница просмотра и редактирования данных СИЗ";
+
+                    return View("SelectedSiz", viewModel);
+
+                    //return RedirectToAction("SelectedSiz","DeptAdmin", new {SizId = prSiz.Id});
+                }
+                ViewData["Title"] = "Ошибка !";
+                ViewData["TitleMess"] = "Не удалось найти СИЗ с таким Табельным номером";
+                return View("ErrorMess");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                return RedirectToAction("Login", "Account");
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

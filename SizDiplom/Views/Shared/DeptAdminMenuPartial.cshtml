@@ -1,6 +1,16 @@
 ﻿<h2>Возможные операции</h2>
 <br />
+<form formmethod="post" asp-action="SelSizByNom" asp-controller="DeptAdmin" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
 
+
+    <div class="form-group">
+        <label for="Siz">Введите Инв. номер СИЗ:</label>
+        <input type="text" name="Nomber" maxlength="30" /> <br />
+        <input type="submit" formmethod="post" value="Посмотреть/Изменить данные СИЗ" />
+        
+    </div>
+</form>
 <form asp-action="SelectedSiz" asp-controller="DeptAdmin">
 
             <div class="form-group">

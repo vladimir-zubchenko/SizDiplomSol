@@ -26,8 +26,8 @@ namespace SizDiplom.Controllers
                 ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
                 return RedirectToAction("Login", "Account");
             }
-            
-            ViewData["Title"] = "ПАНЕЛЬ АДМИНИСТРАТОРА";
+
+            ViewData["Title"] =  $"ПАНЕЛЬ АДМИНИСТРАТОРА {user.Login}";
 
                 return View();
         }
