@@ -21,7 +21,7 @@ body {
 }
 
 #header {
-    background-color: aqua;
+    background-color: #9ef7c8;
     height: 100px;
 }
 
@@ -76,6 +76,14 @@ body {
     margin-bottom: 3px;
 }
 
+.lightgray {
+    background: #d5d5d5;
+}
+
+.darkgray {
+    background: #b7b7b7;
+}
+
 #sidebar {
     margin-bottom: 3px;
     float: right;
@@ -84,11 +92,12 @@ body {
     border-left: 3px solid #ccc;
     border-right: 6px solid #ccc;
     padding: 15px;
-    background: gray;
+    background: #e2e2e2;
 }
 
 #article {
-    background: #32764d;
+    
+    background: #b6b6b6;
     border-left: 6px solid #ccc;
     border-right: 3px solid #ccc;
     padding: 15px;
@@ -135,5 +144,5 @@ footer {
     border-top: 6px solid #ccc;
     text-align: center;
     padding: 10px 10px 30px 10px;
-    background: red;
+    background: #f1cbcb;
 }

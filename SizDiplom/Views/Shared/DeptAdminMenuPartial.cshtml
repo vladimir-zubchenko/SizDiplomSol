@@ -4,16 +4,16 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
 
 
-    <div class="form-group">
+    <div class="lidhtgray">
         <label for="Siz">Введите Инв. номер СИЗ:</label>
-        <input type="text" name="Nomber" maxlength="30" /> <br />
-        <input type="submit" formmethod="post" value="Посмотреть/Изменить данные СИЗ" />
+        <input type="text" name="Nomber" maxlength="30" /> 
+        <input type="submit" formmethod="post" value="Посмотреть/Изменить данные СИЗ" /><br />
         
     </div>
 </form>
 <form asp-action="SelectedSiz" asp-controller="DeptAdmin">
 
-            <div class="form-group">
+    <div class="darkgray">
                 <label for="SizId">Выберите СИЗ:</label>
                 <select id="SizId" name="SizId">
 
@@ -25,12 +25,13 @@
                 </select>
                 <br/>
                 <button type="submit" formmethod="post">Посмотреть/Изменить данные СИЗ</button>
-                <br />
-            </div>
-</form>        
         <br />
+        <br />
+    </div>
+</form>        
+       
 <form asp-action="" asp-controller="DeptAdmin">
-        <div class="form-group">
+    <div class="lightgray">
             <label for="UserId">Выберите Работника:</label>
             <select id="UserId" name="UserId">
 
@@ -42,12 +43,13 @@
             <br />
             <button asp-action="UsersSizs" formmethod="post">Вывести список СИЗ работника</button>
             <button asp-action="ChangeUserF" formmethod="post">Изменить данные работника</button>
-            <br />
-        </div>
+        <br />
+        <br />
+    </div>
 </form>
 <form asp-action="" asp-controller="DeptAdmin">
-        <br />
-        <div class ="form-group">
+      
+    <div class="darkgray">
             <label for="PlaceId">Выберите Склад:</label>
             <select id="PlaceId" name="PlaceId">
 
@@ -56,15 +58,16 @@
                     <option value="@pl.Id">@pl.Name ___ @pl.Description </option>
                 }
             </select>
-            <br />
+         <br />
             <button asp-action="PlaceSizs" formmethod="post">Вывести список СИЗ склада</button>
             <button asp-action="ChangePlaceF" formmethod="post">Изменить данные склада</button>
-            <br />
-        </div>
-</form>
         <br />
+        <br />
+    </div>
+</form>
+        
 <form asp-action="" asp-controller="DeptAdmin">
-        <div class="form-group">
+    <div class="lightgray">
             <label for="CarId">Выберите Автомобиль:</label>
             <select id="CarId" name="CarId">
 
@@ -77,25 +80,27 @@
             <button asp-action="CarSizs" formmethod="post">Вывести список СИЗ автомобиля</button>
             <button asp-action="ChangeCarF" formmethod="post">Изменить данные автомобиля</button>
             <br />
-        </div>
-</form>
         <br />
+    </div>
+</form>
+        
 <form asp-action="CheckDateSizs" asp-controller="DeptAdmin">
-        <div class=" form-group">
+    <div class="darkgray">
             <label for="CheckDate">Выберите дату следующей поверки СИЗ : </label>
                 <input id="CheckDate" type="date" name="CheckDate"/>
             <br />
             <button type="submit" formmethod="post">Вывести список СИЗ по дате</button>
             <br />
-        </div>
-</form>    
         <br />
+    </div>
+</form>    
+        
 <form asp-action="" asp-controller="DeptAdmin">
-    <div>
+    <div class="lightgray">
         <button asp-action="NewSizCreate" formmethod="get">Добавить СИЗ</button>
         <button asp-action="Register" asp-controller="Account" formmethod="get">Добавить работника</button>
-        <br />
-        <br />
+        @* <br />
+        <br /> *@
         <button asp-action="NewPlaceCreate" formmethod="get">Добавить склад</button>
         <button asp-action="NewCarCreate" formmethod="get">Добавить автомобиль</button><br />
     </div>
