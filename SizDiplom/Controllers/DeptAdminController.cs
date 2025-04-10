@@ -19,7 +19,6 @@ namespace SizDiplom.Controllers
         private CarChangeViewModel carChViewModel;
         private NewSizCreateViewModel newSizCreateViewModel;
 
-
         public DeptAdminController(ProgDBaseContext context)
         {
             db = context;
@@ -30,17 +29,14 @@ namespace SizDiplom.Controllers
             newSizCreateViewModel = new NewSizCreateViewModel();
         }
 
-
         [HttpGet]  
         [Authorize(Roles = "deptadmin")]
-        public async Task<IActionResult> Index()// GET: DeptAdminController  вход для deptptadmin вывод просроченных СИЗ выбор дальнейшего пути
+        // GET: DeptAdminController  вход для deptptadmin вывод просроченных СИЗ выбор дальнейшего пути
+        public async Task<IActionResult> Index()
         {
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user != null)
             {
-                // заполняем списки департамента для viewModel
-
-                // await VMinit(user);
 
                 viewModel.usersList = await db.Users.Where(u => u.DepartmentId == user.DepartmentId && u.Role == "user").ToListAsync();
                 viewModel.sizsList = await db.Sizs.Where(s => s.DepartmentId == user.DepartmentId).ToListAsync();
@@ -50,7 +46,9 @@ namespace SizDiplom.Controllers
 
                 int Dep = user.DepartmentId;
                 viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == Dep
-                                        && s.NextCheckDate <= viewModel.CheckDate.AddDays(7)).ToListAsync();
+                                        && s.NextCheckDate <= viewModel.CheckDate).ToListAsync();
+                //viewModel.alarmSizsList = await db.Sizs.Where(s => s.DepartmentId == Dep
+                //                        && s.NextCheckDate <= viewModel.CheckDate.AddDays(7)).ToListAsync();
 
                 ViewData["Title"] = $"Список СИЗ с истёкшим сроком поверки для {user.Login}";
              
@@ -63,21 +61,6 @@ namespace SizDiplom.Controllers
             }
 
         }
-
-        //[HttpGet]
-        //[Authorize(Roles = "deptadmin")]
-        //public async Task<IActionResult> NewSizCreateFAsync() // форма для добавления СИЗ
-        //{
-        //    User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
-        //    if (user == null)
-        //    {
-        //        ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
-        //        return RedirectToAction("Login", "Account");
-        //    }
-        //    ViewData["Title"] = "Создание записи для новогоСИЗ";
-        //    newSizCreateViewModel.DepartmentId = user.DepartmentId;
-        //    return View("NewSizCreateFAsync", newSizCreateViewModel);
-        //}
 
         [HttpGet]
         [Authorize(Roles = "deptadmin")]
@@ -147,7 +130,6 @@ namespace SizDiplom.Controllers
 
             else return View("NewSizCreate", nSiz);
         }
-
 
 
         [HttpPost]
@@ -268,9 +250,6 @@ namespace SizDiplom.Controllers
             
         }
 
-
-
-
         [HttpPost]
         
         [Authorize(Roles = "deptadmin")]
@@ -335,6 +314,7 @@ namespace SizDiplom.Controllers
             return View("ErrorMess");
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "deptadmin")]
@@ -343,7 +323,7 @@ namespace SizDiplom.Controllers
             User? user = await db.Users.FirstOrDefaultAsync(u => u.Login == User.Identity.Name);
             if (user == null)
             {
-                //ModelState.AddModelError("", "Обрыв связи с базой данных (не удалось получить данные)");
+                
                 return RedirectToAction("Login", "Account");
             }
             
@@ -356,19 +336,7 @@ namespace SizDiplom.Controllers
             Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.PlaceId == Id);
             if (siz != null)
             {
-                //Place? place = await db.Places.FirstOrDefaultAsync(p => p.Id == Id);
-                //if (place == null)
-                //{
-                //    ViewData["Title"] = "Ошибка!";
-                //    ViewData["TitleMess"] = "Не удалось получить данные о складе!";
-                //    return View("ErrorMess");
-                //}
-                //placeChViewModel.Id = place.Id;
-                //placeChViewModel.DepartmentId = place.DepartmentId;
-                //placeChViewModel.Name = place.Name;
-                //placeChViewModel.Description = place.Description;                
-                //ViewData["PlaceMessage"] = "За складом закреплены СИЗ!!!";
-                //return View("ChangePlaceF", placeChViewModel);
+                
                 ViewData["Title"] = "Ошибка!";
                 ViewData["TitleMess"] = "За складом закреплены СИЗ!";
                 return View("ErrorMess");
@@ -522,20 +490,7 @@ namespace SizDiplom.Controllers
             Siz? siz = await db.Sizs.FirstOrDefaultAsync(s => s.CarId == Id);
             if (siz != null)
             {
-                //Car? carF = await db.Cars.FirstOrDefaultAsync(c => c.Id == Id);
-                //if(carF == null)
-                //{
-                //    ViewData["Title"] = "Ошибка!";
-                //    ViewData["TitleMess"] = "Не удалось получить данные об автомобиле!";
-                //    return View("ErrorMess");
-
-                //}
-                //carChViewModel.Id = carF.Id;
-                //carChViewModel.DepartmentId = carF.DepartmentId;
-                //carChViewModel.CarNomber = carF.CarNomber;
-                //carChViewModel.Description = carF.Description;
-                //ViewData["CarMessage"] = "За автомобилем закреплены СИЗ!";
-                //return View("ChangeCarF", carChViewModel);
+                
                 ViewData["Title"] = "Ошибка!";
                 ViewData["TitleMess"] = "За автомобилем закреплены СИЗ!";
                 return View("ErrorMess");
@@ -612,10 +567,6 @@ namespace SizDiplom.Controllers
             return View("ErrorMess");
             
         }
-
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

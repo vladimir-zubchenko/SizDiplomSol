@@ -17,7 +17,7 @@ namespace SizDiplom.ViewModels
         public int Id { get; set; }
 
         [Display(Name = "Укажите Ваш табельный номер")]
-        [StringLength(6, ErrorMessage = "длина Табельного номера от 4 до 6 символов", MinimumLength = 4)]
+        [StringLength(10, ErrorMessage = "длина Табельного номера от 4 до 10 символов", MinimumLength = 4)]
         [Required(ErrorMessage = "Не указан Табельный номер")]
         public string TabNom { get; set; } = string.Empty;
 
